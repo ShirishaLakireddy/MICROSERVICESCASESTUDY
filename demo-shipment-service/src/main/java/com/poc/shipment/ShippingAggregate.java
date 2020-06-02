@@ -34,7 +34,7 @@ public class ShippingAggregate {
 	public ShippingAggregate(CreateShippingCommand createShippingCommand) {
 		System.out.println("CreateShippingCommand :: " + createShippingCommand.shippingId);
 
-		if (dailyShippments < 3) {
+		if (dailyShippments < 5) {
 			AggregateLifecycle.apply(new OrderShippedEvent(createShippingCommand.shippingId,
 					createShippingCommand.orderId, createShippingCommand.paymentId, createShippingCommand.userToken));
 		} else {
@@ -58,10 +58,6 @@ public class ShippingAggregate {
 	@EventSourcingHandler
 	protected void on(OrderShippedFailedEvent orderShippedFailedEvent) {
 		System.out.println("OrderShippedFailedEvent :: " + orderShippedFailedEvent.shippingId);
-		// String res = shippingServiceImpl.performShippingBussLogic();
-		// if (res.equals("done")) {
-		// isOrderShipped=true;
-		// }
 
 		this.shippingId = orderShippedFailedEvent.shippingId;
 		this.orderId = orderShippedFailedEvent.orderId;
